@@ -13,3 +13,20 @@ class FormatoBotella(Enum):
 
     def tostring(self):
         f"{self.value} ({self.name})"
+    
+    @staticmethod
+    def tolist():
+        return ["MEDIA_BOTELLA","ESTANDAR","MAGNUM","DOBLE_MAGNUM","JEROBOAM","IMPERIAL","SALMANAZAR","BALTASAR","NABUCODONOSOR"]
+
+    @staticmethod
+    def strtoenum(s):
+        if s == "MEDIA_BOTELLA": return FormatoBotella.MEDIA_BOTELLA
+        if s == "ESTANDAR": return FormatoBotella.ESTANDAR
+        if s == "MAGNUM": return FormatoBotella.MAGNUM
+        if s == "DOBLE_MAGNUM": return FormatoBotella.DOBLE_MAGNUM
+        if s == "JEROBOAM": return FormatoBotella.JEROBOAM
+        if s == "IMPERIAL": return FormatoBotella.IMPERIAL
+        if s == "SALMANAZAR": return FormatoBotella.SALMANAZAR
+        if s == "BALTASAR": return FormatoBotella.BALTASAR
+        if s == "NABUCODONOSOR": return FormatoBotella.NABUCODONOSOR
+        return FormatoBotella.MEDIA_BOTELLA
