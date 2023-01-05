@@ -16,4 +16,11 @@ class Producto:
     cosecha: date
 
     def tolist(self):
-        return [self.nombre,self.descripcion,self.precio,f"{self.formato_botella.value} ({self.formato_botella.name})",self.tipo_corcho.name,self.cosecha.strftime("%m/%Y")]
+        return [
+            self.nombre,
+            self.descripcion,
+            self.precio,
+            f"{self.formato_botella.value} ({self.formato_botella.name})",
+            self.tipo_corcho.name,
+            self.cosecha.strftime("%m/%Y")
+        ]

@@ -158,7 +158,7 @@ class PopUpNewProducto(Toplevel):
                     int(cosecha[2] if len(cosecha) == 3 else cosecha[1]),
                     int(cosecha[1] if len(cosecha) == 3 else cosecha[0]),
                     int(cosecha[0]) if len(cosecha) == 3 else 1
-                    )
+                )
             ))
         except Exception as e:
             print(e)
