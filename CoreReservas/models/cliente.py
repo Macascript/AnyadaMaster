@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 
 @dataclass
@@ -10,6 +10,7 @@ class Cliente:
     direccion: str
     telefono: str
     fecha_nacimiento: date
+    pedidos: list = field(default_factory=lambda: [])
 
     def tolist(self):
         return [

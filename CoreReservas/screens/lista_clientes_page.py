@@ -11,14 +11,13 @@ class ListaClientesPage(Frame):
     def __init__(self, master = None):
         super().__init__(master)
         self.config(bg=bg_color)
-        self.place(rely=0,relx=0,relheight=1,relwidth=1)
         self.create_widgets()
+        self.pack_widgets()
         self.fill_table()
     
     def create_widgets(self):
         self.new_cliente_window = None
-        self.table = Treeview(self,columns=tuple([f"#{x}" for x in range(1,7)]))
-        self.table.pack()
+        self.table = Treeview(self,columns=[f"#{x}" for x in range(1,7)])
 
         self.table.heading("#0",text="Id")
         self.table.column("#0",width=50,anchor="c")
@@ -44,11 +43,20 @@ class ListaClientesPage(Frame):
         self.table.bind('<ButtonRelease-1>',self.select_item)
 
         self.add_button = Button(self,text="+",command=self.add_button_command)
-        self.add_button.pack()
 
         self.delete_button = Button(self,text="x",command=self.delete_button_command)
         self.edit_button = Button(self,text="e",command=self.edit_button_command)
     
+    def pack_widgets(self):
+        self.place(rely=0,relx=0.2,relheight=1,relwidth=0.8)
+        self.table.pack()
+        self.add_button.pack()
+    
+    # def unpack_widgets(self):
+    #     self.add_button.pack_forget()
+    #     self.table.pack_forget()
+    #     self.place_forget()
+
     def fill_table(self):
         for cliente in get_lista_clientes().values():
             self.table.insert("","end",text=cliente.id,values=cliente.tolist())

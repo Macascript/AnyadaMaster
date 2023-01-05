@@ -25,6 +25,29 @@ lista_clientes = {
 
 next_clientes_index = 4
 
+
+lista_pedidos = {
+    0: Pedido(0,lista_clientes[0],0.5,[
+            Item(lista_productos[0],2),
+            Item(lista_productos[1],1)
+        ]),
+    1: Pedido(1,lista_clientes[1],0.5,[
+            Item(lista_productos[1],2),
+            Item(lista_productos[2],1)
+        ]),
+    2: Pedido(2,lista_clientes[2],0.5,[
+            Item(lista_productos[3],3),
+            Item(lista_productos[1],5)
+        ]),
+    3: Pedido(3,lista_clientes[3],0.5,[
+            Item(lista_productos[0],4),
+            Item(lista_productos[1],5)
+        ]),
+}
+
+next_pedidos_index = 4
+max_height = 3
+
 # Clientes
 
 def get_lista_productos():
@@ -74,3 +97,32 @@ def update_cliente(cliente):
 def get_cliente_by_id(id):
     global lista_clientes
     return lista_clientes[id]
+
+# Pedidos
+
+def get_lista_pedidos():
+    global lista_pedidos
+    return lista_pedidos
+
+def get_next_pedidos_index():
+    global next_pedidos_index
+    return next_pedidos_index
+
+def add_pedido(pedido):
+    global lista_pedidos
+    global next_pedidos_index
+    lista_pedidos.update({pedido.id:pedido})
+    next_pedidos_index += 1
+
+def update_pedido(pedido):
+    global lista_pedidos
+    global next_pedidos_index
+    lista_pedidos.update({pedido.id:pedido})
+
+def get_pedido_by_id(id):
+    global lista_pedidos
+    return lista_pedidos[id]
+
+def get_max_height():
+    global max_height
+    return max_height * 20
