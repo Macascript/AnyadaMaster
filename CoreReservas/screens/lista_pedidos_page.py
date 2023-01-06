@@ -41,6 +41,7 @@ class ListaPedidosPage(Frame):
 
         self.delete_button = Button(self,text="x",command=self.delete_button_command)
         self.edit_button = Button(self,text="e",command=self.edit_button_command)
+        self.factura_button = Button(self,text="Factura",command=self.imprimir_factura)
     
     def pack_widgets(self):
         self.place(rely=0,relx=0.2,relheight=1,relwidth=0.8)
@@ -59,6 +60,7 @@ class ListaPedidosPage(Frame):
     def select_item(self,e):
         self.edit_button.pack()
         self.delete_button.pack()
+        self.factura_button.pack()
     
     def add_button_command(self):
         self.new_pedido_window = PopUpNewPedido(self.add_pedido)
@@ -81,6 +83,10 @@ class ListaPedidosPage(Frame):
         print(pedido)
         self.table.insert("","end",text=pedido.id,values=pedido.tolist())
         add_pedido(pedido)
+    
+    def imprimir_factura(self):
+        pedido = get_pedido_by_id(self.table.item(self.table.selection())["text"])
+        pass
 
 class PopUpNewPedido(Toplevel):
     def __init__(self,add_function,title="Nuevo pedido",pedido=None):
