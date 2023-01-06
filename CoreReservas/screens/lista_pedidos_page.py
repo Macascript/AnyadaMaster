@@ -5,7 +5,7 @@ from functools import partial
 
 from config import *
 from utils.popup import PopUp
-from repository import get_lista_pedidos, get_next_pedidos_index, add_pedido, get_pedido_by_id, update_pedido, get_max_height, get_lista_clientes, get_cliente_by_id, get_producto_by_id, get_lista_productos
+from repository import get_lista_pedidos, get_next_pedidos_index, add_pedido, get_pedido_by_id, update_pedido, delete_pedido, get_max_height, get_lista_clientes, get_cliente_by_id, get_producto_by_id, get_lista_productos
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.pedido import Pedido, Item
 
@@ -60,7 +60,7 @@ class ListaPedidosPage(Frame):
     def select_item(self,e):
         self.edit_button.pack()
         self.delete_button.pack()
-        self.factura_button.pack()
+        # self.factura_button.pack()
     
     def add_button_command(self):
         self.new_pedido_window = PopUpNewPedido(self.add_pedido)
@@ -86,6 +86,8 @@ class ListaPedidosPage(Frame):
     def delete_pedido(self,pedido):
         self.delete_button.pack_forget()
         self.edit_button.pack_forget()
+        # self.factura_button.pack_forget()
+        delete_pedido(get_pedido_by_id(self.table.item(pedido)["text"]))
         self.table.delete(pedido)
     
     def imprimir_factura(self):

@@ -5,7 +5,7 @@ from functools import partial
 
 from config import *
 from utils.popup import PopUp
-from repository import get_lista_clientes, get_next_clientes_index, add_cliente, get_cliente_by_id, update_cliente
+from repository import get_lista_clientes, get_next_clientes_index, add_cliente, get_cliente_by_id, update_cliente, delete_cliente
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.cliente import Cliente
 
@@ -73,28 +73,29 @@ class ListaClientesPage(Frame):
     def add_button_command(self):
         self.new_cliente_window = PopUpNewCliente(self.add_cliente)
     
-    def delete_button_command(self):
-        cliente = self.table.selection()
-        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar el cliente?",accept_func=partial(self.delete_cliente,cliente))
-
-    def delete_cliente(self,cliente):
-        self.delete_button.pack_forget()
-        self.edit_button.pack_forget()
-        self.table.delete(cliente)
-    
     def edit_button_command(self):
         print(self.table.item(self.table.selection())["text"])
         self.new_cliente_window = PopUpNewCliente(self.edit_cliente,title="Editar",cliente=get_cliente_by_id(self.table.item(self.table.selection())["text"]))
     
-    def edit_cliente(self,cliente):
-        print(cliente)
-        self.table.item(self.table.selection()[0],values=cliente.tolist())
-        update_cliente(cliente)
+    def delete_button_command(self):
+        cliente = self.table.selection()
+        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar el cliente?",accept_func=partial(self.delete_cliente,cliente))
     
     def add_cliente(self,cliente):
         print(cliente)
         self.table.insert("","end",text=cliente.id,values=cliente.tolist())
         add_cliente(cliente)
+    
+    def edit_cliente(self,cliente):
+        print(cliente)
+        self.table.item(self.table.selection()[0],values=cliente.tolist())
+        update_cliente(cliente)
+
+    def delete_cliente(self,cliente):
+        self.delete_button.pack_forget()
+        self.edit_button.pack_forget()
+        delete_cliente(get_cliente_by_id(self.table.item(cliente)["text"]))
+        self.table.delete(cliente)
 
 class PopUpNewCliente(Toplevel):
     def __init__(self,add_function,title="Nuevo cliente",cliente=None):

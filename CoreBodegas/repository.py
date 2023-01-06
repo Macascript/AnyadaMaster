@@ -119,13 +119,23 @@ def get_next_materias_primas_index():
 def add_materia_prima(materia_prima):
     global lista_materias_primas
     global next_materias_primas_index
+    global historial
     lista_materias_primas.update({materia_prima.id:materia_prima})
+    historial.append(f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha añadido la materia prima ({materia_prima.id}) {materia_prima.nombre}")
     next_materias_primas_index += 1
 
 def update_materia_prima(materia_prima):
     global lista_materias_primas
-    global next_materias_primas_index
+    global historial
     lista_materias_primas.update({materia_prima.id:materia_prima})
+    historial.append(f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha editado la materia prima ({materia_prima.id}) {materia_prima.nombre}")
+
+def delete_materia_prima(materia_prima):
+    global lista_materias_primas
+    global historial
+    lista_materias_primas.pop(materia_prima.id)
+    historial.append(f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado la materia prima ({materia_prima.id}) {materia_prima.nombre}")
+
 
 def get_materia_prima_by_id(id):
     global lista_materias_primas
@@ -148,13 +158,22 @@ def get_next_personal_index():
 def add_personal(personal):
     global lista_personal
     global next_personal_index
+    global historial
     lista_personal.update({personal.id:personal})
+    historial.append(f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha añadido al personal ({personal.id}) {personal.nombre}")
     next_personal_index += 1
 
 def update_personal(personal):
     global lista_personal
     global next_personal_index
+    global historial
     lista_personal.update({personal.id:personal})
+    historial.append(f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha editado al personal ({personal.id}) {personal.nombre}")
+
+def delete_personal(personal):
+    global lista_materias_primas
+    global historial
+    historial.append(f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado al personal ({personal.id}) {personal.nombre}")
 
 def get_personal_by_id(id):
     global lista_personal

@@ -5,7 +5,7 @@ from functools import partial
 
 from config import *
 from utils.popup import PopUp
-from repository import get_lista_personal, get_next_personal_index, add_personal, get_personal_by_id, update_personal
+from repository import get_lista_personal, get_next_personal_index, add_personal, get_personal_by_id, update_personal, delete_personal
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.categoria_laboral import CategoriaLaboral
 from models.estado_civil import EstadoCivil
@@ -118,6 +118,7 @@ class ListaPersonalPage(Frame):
     def delete_personal(self,personal):
         self.delete_button.pack_forget()
         self.edit_button.pack_forget()
+        delete_personal(get_personal_by_id(self.table.item(personal)["text"]))
         self.table.delete(personal)
 
 class PopUpNewPersonal(Toplevel):

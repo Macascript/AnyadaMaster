@@ -5,7 +5,7 @@ from functools import partial
 
 from config import *
 from utils.popup import PopUp
-from repository import get_lista_productos, get_next_productos_index, add_producto, get_producto_by_id, update_producto
+from repository import get_lista_productos, get_next_productos_index, add_producto, get_producto_by_id, update_producto, delete_producto
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.formato_botella import FormatoBotella
 from models.tipo_corcho import TipoCorcho
@@ -83,13 +83,13 @@ class ListaProductosPage(Frame):
     def add_button_command(self):
         self.new_producto_window = PopUpNewProducto(self.add_producto)
     
-    def delete_button_command(self):
-        producto = self.table.selection()
-        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar el producto?",accept_func=partial(self.delete_producto,producto))
-    
     def edit_button_command(self):
         print(self.table.item(self.table.selection())["text"])
         self.new_producto_window = PopUpNewProducto(self.edit_producto,title="Editar",producto=get_producto_by_id(self.table.item(self.table.selection())["text"]))
+    
+    def delete_button_command(self):
+        producto = self.table.selection()
+        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar el producto?",accept_func=partial(self.delete_producto,producto))
     
     def add_producto(self,producto):
         print(producto)
@@ -104,6 +104,7 @@ class ListaProductosPage(Frame):
     def delete_producto(self,producto):
         self.delete_button.pack_forget()
         self.edit_button.pack_forget()
+        delete_producto(get_producto_by_id(self.table.item(producto)["text"]))
         self.table.delete(producto)
 
 class PopUpNewProducto(Toplevel):

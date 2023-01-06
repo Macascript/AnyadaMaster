@@ -66,8 +66,11 @@ def add_producto(producto):
 
 def update_producto(producto):
     global lista_productos
-    global next_productos_index
     lista_productos.update({producto.id:producto})
+
+def delete_producto(producto):
+    global lista_productos
+    lista_productos.pop(producto.id)
 
 def get_producto_by_id(id):
     global lista_productos
@@ -91,8 +94,11 @@ def add_cliente(cliente):
 
 def update_cliente(cliente):
     global lista_clientes
-    global next_clientes_index
     lista_clientes.update({cliente.id:cliente})
+
+def delete_cliente(cliente):
+    global lista_clientes
+    lista_clientes.pop(cliente.id)
 
 def get_cliente_by_id(id):
     global lista_clientes
@@ -116,8 +122,11 @@ def add_pedido(pedido):
 
 def update_pedido(pedido):
     global lista_pedidos
-    global next_pedidos_index
     lista_pedidos.update({pedido.id:pedido})
+
+def delete_pedido(pedido):
+    global lista_pedidos
+    lista_pedidos.pop(pedido.id)
 
 def get_pedido_by_id(id):
     global lista_pedidos

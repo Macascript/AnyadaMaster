@@ -5,7 +5,7 @@ from functools import partial
 
 from config import *
 from utils.popup import PopUp
-from repository import get_lista_materias_primas, get_next_materias_primas_index, add_materia_prima, get_materia_prima_by_id, update_materia_prima
+from repository import get_lista_materias_primas, get_next_materias_primas_index, add_materia_prima, get_materia_prima_by_id, update_materia_prima, delete_materia_prima
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.materia_prima import MateriaPrima
 from models.tipo_uva import TipoUva
@@ -93,6 +93,7 @@ class ListaMateriasPrimasPage(Frame):
     def delete_materia_prima(self,materia_prima):
         self.delete_button.pack_forget()
         self.edit_button.pack_forget()
+        delete_materia_prima(get_materia_prima_by_id(self.table.item(materia_prima)["text"]))
         self.table.delete(materia_prima)
 
 class PopUpNewMateriaPrima(Toplevel):
