@@ -1,5 +1,5 @@
 from tkinter import Frame, Toplevel, Button, Label
-from tkinter.ttk import Treeview
+from tkinter.ttk import Treeview, Style
 import datetime
 from functools import partial
 
@@ -16,6 +16,8 @@ class ListaClientesPage(Frame):
         self.create_widgets()
         self.pack_widgets()
         self.fill_table()
+        self.style = Style()
+        self.style.configure('Treeview', rowheight=20)
     
     def create_widgets(self):
         self.new_cliente_window = None

@@ -18,7 +18,7 @@ class ListaPedidosPage(Frame):
         self.pack_widgets()
         self.fill_table()
         self.style = Style()
-        self.style.configure('Treeview', rowheight=get_max_height()) # repace 40 with whatever you need
+        self.style.configure('Treeview', rowheight=get_max_height())
     
     def create_widgets(self):
         self.table = Treeview(self,columns=[f"#{x}" for x in range(1,4)])
