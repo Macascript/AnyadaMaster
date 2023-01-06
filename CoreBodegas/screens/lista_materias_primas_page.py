@@ -1,8 +1,10 @@
 from tkinter import Frame, Toplevel, Button, OptionMenu, StringVar, Label
 from tkinter.ttk import Treeview
 import datetime
+from functools import partial
 
 from config import *
+from utils.popup import PopUp
 from repository import get_lista_materias_primas, get_next_materias_primas_index, add_materia_prima, get_materia_prima_by_id, update_materia_prima
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.materia_prima import MateriaPrima
@@ -70,14 +72,13 @@ class ListaMateriasPrimasPage(Frame):
     def add_button_command(self):
         self.new_materia_prima_window = PopUpNewMateriaPrima(self.add_materia_prima)
     
-    def delete_button_command(self):
-        self.delete_button.pack_forget()
-        self.edit_button.pack_forget()
-        self.table.delete(self.table.selection())
-    
     def edit_button_command(self):
         print(self.table.item(self.table.selection())["text"])
         self.new_materia_prima_window = PopUpNewMateriaPrima(self.edit_materia_prima,title="Editar",materia_prima=get_materia_prima_by_id(self.table.item(self.table.selection())["text"]))
+    
+    def delete_button_command(self):
+        materia_prima = self.table.selection()
+        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar la materia prima?",accept_func=partial(self.delete_materia_prima,materia_prima))
     
     def edit_materia_prima(self,materia_prima):
         print(materia_prima)
@@ -88,6 +89,11 @@ class ListaMateriasPrimasPage(Frame):
         print(materia_prima)
         self.table.insert("","end",text=materia_prima.id,values=materia_prima.tolist())
         add_materia_prima(materia_prima)
+    
+    def delete_materia_prima(self,materia_prima):
+        self.delete_button.pack_forget()
+        self.edit_button.pack_forget()
+        self.table.delete(materia_prima)
 
 class PopUpNewMateriaPrima(Toplevel):
     def __init__(self,add_function,title="Nueva materia_prima",materia_prima=None):
@@ -153,11 +159,15 @@ class PopUpNewMateriaPrima(Toplevel):
             self.calidad_entry["fg"] = self.calidad_entry.default_fg_color
         self.calidad_entry.place(rely=0.5, relx=0.875)
 
-        self.add_button = Button(self,text="Aceptar",command=self.add)
+        self.add_button = Button(self,text="Aceptar",command=self.add_button_command)
         self.add_button.pack()
 
         self.message = Label(self,text="No has introducido los datos correctamente",foreground=error_color,background=bg_color)
     
+    def add_button_command(self):
+        string = "añadir" if self.materia_prima is None else "editar"
+        self.popup_estas_seguro = PopUp(message=f"¿Estás seguro de que quieres {string} la materia prima?",accept_func=self.add)
+
     def add(self):
         try:
             calidad = int(self.calidad_entry.get())

@@ -1,8 +1,10 @@
 from tkinter import Frame, Toplevel, Button, OptionMenu, StringVar, Label, Listbox
 from tkinter.ttk import Treeview, Style
 import datetime
+from functools import partial
 
 from config import *
+from utils.popup import PopUp
 from repository import get_lista_pedidos, get_next_pedidos_index, add_pedido, get_pedido_by_id, update_pedido, get_max_height, get_lista_clientes, get_cliente_by_id, get_producto_by_id, get_lista_productos
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.pedido import Pedido, Item
@@ -19,10 +21,8 @@ class ListaPedidosPage(Frame):
         self.style.configure('Treeview', rowheight=get_max_height()) # repace 40 with whatever you need
     
     def create_widgets(self):
-        self.new_pedido_window = None
         self.table = Treeview(self,columns=[f"#{x}" for x in range(1,4)])
         
-
         self.table.heading("#0",text="Id")
         self.table.column("#0",width=50,anchor="c")
 
@@ -65,24 +65,28 @@ class ListaPedidosPage(Frame):
     def add_button_command(self):
         self.new_pedido_window = PopUpNewPedido(self.add_pedido)
     
-    def delete_button_command(self):
-        self.delete_button.pack_forget()
-        self.edit_button.pack_forget()
-        self.table.delete(self.table.selection())
-    
     def edit_button_command(self):
         print(self.table.item(self.table.selection())["text"])
         self.new_pedido_window = PopUpNewPedido(self.edit_pedido,title="Editar",pedido=get_pedido_by_id(self.table.item(self.table.selection())["text"]))
+    
+    def delete_button_command(self):
+        pedido = self.table.selection()
+        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar el pedido?",accept_func=partial(self.delete_pedido,pedido))
+    
+    def add_pedido(self,pedido):
+        print(pedido)
+        self.table.insert("","end",text=pedido.id,values=pedido.tolist())
+        add_pedido(pedido)
     
     def edit_pedido(self,pedido):
         print(pedido)
         self.table.item(self.table.selection()[0],values=pedido.tolist())
         update_pedido(pedido)
     
-    def add_pedido(self,pedido):
-        print(pedido)
-        self.table.insert("","end",text=pedido.id,values=pedido.tolist())
-        add_pedido(pedido)
+    def delete_pedido(self,pedido):
+        self.delete_button.pack_forget()
+        self.edit_button.pack_forget()
+        self.table.delete(pedido)
     
     def imprimir_factura(self):
         pedido = get_pedido_by_id(self.table.item(self.table.selection())["text"])
@@ -128,13 +132,17 @@ class PopUpNewPedido(Toplevel):
                 self.items_listbox.insert("end",f"({item.producto.id}) {item.producto.nombre} x{item.cantidad}")
         self.items_listbox.place(rely=0.3,relx=0.8)
 
-        self.add_button = Button(self,text="Aceptar",command=self.add)
+        self.add_button = Button(self,text="Aceptar",command=self.add_button_command)
         self.add_button.pack()
 
         self.message = Label(self,text="No has introducido los datos correctamente",foreground=error_color,background=bg_color)
     
     def add_item_command(self):
         self.items_listbox.insert("end",f"{self.producto_value.get()} x{self.cantidad_entry.get()}")
+
+    def add_button_command(self):
+        string = "añadir" if self.pedido is None else "editar"
+        self.popup_estas_seguro = PopUp(message=f"¿Estás seguro de que quieres {string} el pedido?",accept_func=self.add)
 
     def add(self):
         try:

@@ -162,15 +162,15 @@ def get_personal_by_id(id):
 
 
 historial = [
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
-    "Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito"
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito",
+    f"[{datetime.datetime.now()}] Personal Perico Pilatos 2134124124F ha eliminado el pedido (0) del cliente (0) Joselito"
 ]
 
 def get_historial():

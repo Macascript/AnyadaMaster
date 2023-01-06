@@ -1,8 +1,10 @@
 from tkinter import Frame, Toplevel, Button, OptionMenu, StringVar, Label
 from tkinter.ttk import Treeview
 import datetime
+from functools import partial
 
 from config import *
+from utils.popup import PopUp
 from repository import get_lista_productos, get_next_productos_index, add_producto, get_producto_by_id, update_producto
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.formato_botella import FormatoBotella
@@ -80,23 +82,27 @@ class ListaProductosPage(Frame):
         self.new_producto_window = PopUpNewProducto(self.add_producto)
     
     def delete_button_command(self):
-        self.delete_button.pack_forget()
-        self.edit_button.pack_forget()
-        self.table.delete(self.table.selection())
+        producto = self.table.selection()
+        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar el producto?",accept_func=partial(self.delete_producto,producto))
     
     def edit_button_command(self):
         print(self.table.item(self.table.selection())["text"])
         self.new_producto_window = PopUpNewProducto(self.edit_producto,title="Editar",producto=get_producto_by_id(self.table.item(self.table.selection())["text"]))
     
-    def edit_producto(self,producto):
-        print(producto)
-        self.table.item(self.table.selection()[0],values=producto.tolist())
-        update_producto(producto)
-    
     def add_producto(self,producto):
         print(producto)
         self.table.insert("","end",text=producto.id,values=producto.tolist())
         add_producto(producto)
+    
+    def edit_producto(self,producto):
+        print(producto)
+        self.table.item(self.table.selection()[0],values=producto.tolist())
+        update_producto(producto)
+
+    def delete_producto(self,producto):
+        self.delete_button.pack_forget()
+        self.edit_button.pack_forget()
+        self.table.delete(producto)
 
 class PopUpNewProducto(Toplevel):
     def __init__(self,add_function,title="Nuevo producto",producto=None):
@@ -147,11 +153,15 @@ class PopUpNewProducto(Toplevel):
             self.cosecha_entry["fg"] = self.cosecha_entry.default_fg_color
         self.cosecha_entry.place(rely=0.5, relx=0.85)
 
-        self.add_button = Button(self,text="Aceptar",command=self.add)
+        self.add_button = Button(self,text="Aceptar",command=self.add_button_command)
         self.add_button.pack()
 
         self.message = Label(self,text="No has introducido los datos correctamente",foreground=error_color,background=bg_color)
     
+    def add_button_command(self):
+        string = "añadir" if self.producto is None else "editar"
+        self.popup_estas_seguro = PopUp(message=f"¿Estás seguro de que quieres {string} el producto?",accept_func=self.add)
+
     def add(self):
         try:
             cosecha = self.cosecha_entry.get().split("/")

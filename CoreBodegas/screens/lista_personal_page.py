@@ -1,8 +1,10 @@
 from tkinter import Frame, Toplevel, Button, OptionMenu, StringVar, Label
 from tkinter.ttk import Treeview
 import datetime
+from functools import partial
 
 from config import *
+from utils.popup import PopUp
 from repository import get_lista_personal, get_next_personal_index, add_personal, get_personal_by_id, update_personal
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.categoria_laboral import CategoriaLaboral
@@ -95,24 +97,28 @@ class ListaPersonalPage(Frame):
     def add_button_command(self):
         self.new_personal_window = PopUpNewPersonal(self.add_personal)
     
-    def delete_button_command(self):
-        self.delete_button.pack_forget()
-        self.edit_button.pack_forget()
-        self.table.delete(self.table.selection())
-    
     def edit_button_command(self):
         print(self.table.item(self.table.selection())["text"])
         self.new_personal_window = PopUpNewPersonal(self.edit_personal,title="Editar",personal=get_personal_by_id(self.table.item(self.table.selection())["text"]))
+    
+    def delete_button_command(self):
+        personal = self.table.selection()
+        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar al personal?",accept_func=partial(self.delete_personal,personal))
+    
+    def add_personal(self,personal):
+        print(personal)
+        self.table.insert("","end",text=personal.id,values=personal.tolist())
+        add_personal(personal)
     
     def edit_personal(self,personal):
         print(personal)
         self.table.item(self.table.selection()[0],values=personal.tolist())
         update_personal(personal)
     
-    def add_personal(self,personal):
-        print(personal)
-        self.table.insert("","end",text=personal.id,values=personal.tolist())
-        add_personal(personal)
+    def delete_personal(self,personal):
+        self.delete_button.pack_forget()
+        self.edit_button.pack_forget()
+        self.table.delete(personal)
 
 class PopUpNewPersonal(Toplevel):
     def __init__(self,add_function,title="Nuevo personal",personal=None):
@@ -199,11 +205,15 @@ class PopUpNewPersonal(Toplevel):
         self.estado_entry.place(rely=0.5, relx=0.9)
         
 
-        self.add_button = Button(self,text="Aceptar",command=self.add)
+        self.add_button = Button(self,text="Aceptar",command=self.add_button_command)
         self.add_button.pack()
 
         self.message = Label(self,text="No has introducido los datos correctamente",foreground=error_color,background=bg_color)
     
+    def add_button_command(self):
+        string = "añadir" if self.personal is None else "editar"
+        self.popup_estas_seguro = PopUp(message=f"¿Estás seguro de que quieres {string} al personal?",accept_func=self.add)
+
     def add(self):
         try:
             nacimiento = self.fecha_nacimiento_entry.get().split("/")
@@ -228,7 +238,7 @@ class PopUpNewPersonal(Toplevel):
                     int(ingreso[1]),
                     int(ingreso[0])
                 ),
-                EstadoCivil.strtoenum(self.estado_entry.get())
+                EstadoCivil.strtoenum(self.estado_value.get())
             ))
         except Exception as e:
             print(e)

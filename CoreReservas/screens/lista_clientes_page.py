@@ -1,8 +1,10 @@
 from tkinter import Frame, Toplevel, Button, Label
 from tkinter.ttk import Treeview
 import datetime
+from functools import partial
 
 from config import *
+from utils.popup import PopUp
 from repository import get_lista_clientes, get_next_clientes_index, add_cliente, get_cliente_by_id, update_cliente
 from utils.entry_placeholder import EntryWithPlaceholder
 from models.cliente import Cliente
@@ -17,6 +19,7 @@ class ListaClientesPage(Frame):
     
     def create_widgets(self):
         self.new_cliente_window = None
+        self.popup_estas_seguro = None
         self.table = Treeview(self,columns=[f"#{x}" for x in range(1,7)])
 
         self.table.heading("#0",text="Id")
@@ -69,9 +72,13 @@ class ListaClientesPage(Frame):
         self.new_cliente_window = PopUpNewCliente(self.add_cliente)
     
     def delete_button_command(self):
+        cliente = self.table.selection()
+        self.popup_estas_seguro = PopUp(message="¿Estás seguro de que quieres eliminar el cliente?",accept_func=partial(self.delete_cliente,cliente))
+
+    def delete_cliente(self,cliente):
         self.delete_button.pack_forget()
         self.edit_button.pack_forget()
-        self.table.delete(self.table.selection())
+        self.table.delete(cliente)
     
     def edit_button_command(self):
         print(self.table.item(self.table.selection())["text"])
@@ -90,6 +97,7 @@ class ListaClientesPage(Frame):
 class PopUpNewCliente(Toplevel):
     def __init__(self,add_function,title="Nuevo cliente",cliente=None):
         super().__init__()
+        self.popup_estas_seguro = None
         self.cliente = cliente
         self.config(bg=bg_color)
         self.geometry("700x100")
@@ -138,11 +146,15 @@ class PopUpNewCliente(Toplevel):
             self.fecha_nacimiento_entry["fg"] = self.fecha_nacimiento_entry.default_fg_color
         self.fecha_nacimiento_entry.place(rely=0.5, relx=0.85)
 
-        self.add_button = Button(self,text="Aceptar",command=self.add)
+        self.add_button = Button(self,text="Aceptar",command=self.add_button_command)
         self.add_button.pack()
 
         self.message = Label(self,text="No has introducido los datos correctamente",foreground=error_color,background=bg_color)
     
+    def add_button_command(self):
+        string = "añadir" if self.cliente is None else "editar"
+        self.popup_estas_seguro = PopUp(message=f"¿Estás seguro de que quieres {string} el cliente?",accept_func=self.add)
+
     def add(self):
         try:
             fecha_nacimiento = self.fecha_nacimiento_entry.get().split("/")
