@@ -63,7 +63,7 @@ lista_personal = {
         datetime.datetime.now(),
         EstadoCivil.CASADO
     ),
-    1: Personal(2,
+    1: Personal(1,
         "Menganito",
         "Fulanito",
         "2134124124F",
