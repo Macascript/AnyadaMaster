@@ -51,8 +51,8 @@ next_materias_primas_index = 4
 
 lista_personal = {
     0: Personal(0,
-        "Perico",
-        "Pilatos",
+        "Fulanito",
+        "Menganito",
         "2134124124F",
         "A318u81342",
         datetime.datetime.now(),
@@ -64,8 +64,8 @@ lista_personal = {
         EstadoCivil.CASADO
     ),
     1: Personal(2,
-        "Perico",
-        "Pilatos",
+        "Menganito",
+        "Fulanito",
         "2134124124F",
         "A318u81342",
         datetime.datetime.now(),
@@ -77,7 +77,7 @@ lista_personal = {
         EstadoCivil.CASADO
     ),
     2: Personal(2,
-        "Perico",
+        "Fulanito",
         "Pilatos",
         "2134124124F",
         "A318u81342",
@@ -98,7 +98,7 @@ lista_personal = {
         "C/ Alpargata",
         "678901234",
         "Pepito: 6123345789",
-        CategoriaLaboral.PERSONAL,
+        CategoriaLaboral.ADMINISTRATIVO,
         datetime.datetime.now(),
         EstadoCivil.CASADO
     )
